@@ -53,7 +53,6 @@ uint16_t mqttPort     = 1883;
 char mqttUserTest[32];
 char mqttPassTest[32];
 bool useMQTTcredentials = false;
-const char* mqttUserId= "TS0000002";
 char mqttDeviceId[10];
 
 const char* mqttTopicDisplayText1 = "dispTxt1";
@@ -267,7 +266,7 @@ void reconnect() {
 
   // Attempt to connect with credentials or just ID as set in settings
   if(useMQTTcredentials){
-    if (client.connect(mqttUserId, &mqttUserTest[0], &mqttPassTest[0])) {
+    if (client.connect(mqttDeviceId, &mqttUserTest[0], &mqttPassTest[0])) {
       // connected
       mqttIsConnected = true;
 
@@ -275,8 +274,8 @@ void reconnect() {
       Serial.println("MQTT Connected");
       #endif
       // Once connected, publish an announcement containing topics this device supports
-      client.publish(mqttUserId, &mqttPublishTopicList.listPayload[0], sizeof(mqttPublishTopicList_t));
-      client.publish(mqttUserId, &mqttSubscribeTopicList.listPayload[0], sizeof(mqttSubscribeTopicList_t));
+      client.publish(mqttDeviceId, &mqttPublishTopicList.listPayload[0], sizeof(mqttPublishTopicList_t));
+      client.publish(mqttDeviceId, &mqttSubscribeTopicList.listPayload[0], sizeof(mqttSubscribeTopicList_t));
 
       renewSubscriptions();
 
@@ -288,15 +287,15 @@ void reconnect() {
       // delay(2000);
     }
   } else {
-    if(client.connect(mqttUserId)){
+    if(client.connect(mqttDeviceId)){
       mqttIsConnected = true;
 
       #ifdef SERIAL_DEBUG
       Serial.println("MQTT Connected");
       #endif
       // Once connected, publish an announcement containing topics this device supports
-      client.publish(mqttUserId, &mqttPublishTopicList.listPayload[0], sizeof(mqttPublishTopicList_t));
-      client.publish(mqttUserId, &mqttSubscribeTopicList.listPayload[0], sizeof(mqttSubscribeTopicList_t));
+      client.publish(mqttDeviceId, &mqttPublishTopicList.listPayload[0], sizeof(mqttPublishTopicList_t));
+      client.publish(mqttDeviceId, &mqttSubscribeTopicList.listPayload[0], sizeof(mqttSubscribeTopicList_t));
 
       renewSubscriptions();
 
@@ -465,7 +464,7 @@ void getMQTTtopicList(){
     if (tempTopic.direction == 1){
       
       for(int j = 0; j < 9; j++){
-        subscribeTopic2[topicCharCounter++] = mqttUserId[j];
+        subscribeTopic2[topicCharCounter++] = mqttDeviceId[j];
       }
 
       subscribeTopic2[topicCharCounter++] = '/';
@@ -481,7 +480,7 @@ void getMQTTtopicList(){
     }else if(tempTopic.direction == 3){
 
       for(int j = 0; j < 9; j++){
-        subscribeTopic1[topicCharCounter++] = mqttUserId[j];
+        subscribeTopic1[topicCharCounter++] = mqttDeviceId[j];
       }
 
       subscribeTopic1[topicCharCounter++] = '/';
@@ -527,7 +526,7 @@ void getMQTTtopicList(){
     }
 
     for(int j = 0; j < 9; j++){
-      topicToFill[topicCharCounter++] = mqttUserId[j];
+      topicToFill[topicCharCounter++] = mqttDeviceId[j];
     }
 
     topicToFill[topicCharCounter++] = '/';
